@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}User {{ login_status["username"] }}{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div style="text-align: center;" class="container">
+        <p>Name: {{ login_status["first_name"] }} {{ login_status["last_name"] }}</p>
+        <p>Display Name (Username): {{ login_status["username"] }}</p>
+    </div>
+{% endblock %}
