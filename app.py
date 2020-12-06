@@ -20,14 +20,14 @@ if "DYNO" not in os.environ:
             IMGUR_ID=apiToken.readline().strip().strip("Imgur ID: "),
             MONGO_URI=apiToken.readline().strip().strip("MONGO_URI: "),
             SECRET_KEY=apiToken.readline().strip().strip("SECRET_KEY: "),
-            UPLOAD_FOLDER=os.path.join("static", "tmp_blog_images")
+            UPLOAD_FOLDER="./tmp"
         )
 else:
     app.config.update(
         IMGUR_ID=os.environ["IMGUR_ID"],
         MONGO_URI=os.environ["MONGO_URI"],
         SECRET_KEY=os.environ["SECRET_KEY"],
-        UPLOAD_FOLDER=os.path.join("static", "tmp_blog_images")
+        UPLOAD_FOLDER="./tmp"
     )
 app.config["ImgurObject"] = pyimgur.Imgur(app.config["IMGUR_ID"])
 mongo = PyMongo(app)
@@ -237,6 +237,7 @@ def add_blog_new():
     print(app.config['UPLOAD_FOLDER'], filename, os.path.join(app.config['UPLOAD_FOLDER'], filename))
     uploaded_file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
     to_upload_image = app.config["ImgurObject"].upload_image(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+    # to_upload_image = app.config["ImgurObject"].upload_image(uploaded_file.read())
     doc = {
         "title": title,
         "user": username,
