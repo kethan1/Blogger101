@@ -27,7 +27,7 @@ else:
         IMGUR_ID=os.environ["IMGUR_ID"],
         MONGO_URI=os.environ["MONGO_URI"],
         SECRET_KEY=os.environ["SECRET_KEY"],
-        UPLOAD_FOLDER="/static/images/tmp_blog_images/"
+        UPLOAD_FOLDER=os.path.join(APP_ROOT, "static", "tmp_blog_images")
     )
 app.config["ImgurObject"] = pyimgur.Imgur(app.config["IMGUR_ID"])
 mongo = PyMongo(app)
