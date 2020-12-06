@@ -19,6 +19,7 @@
 
 {% block content %}
     <script>
+        console.log(JSON.parse('{{login_status}}')["username"]);
         function FinalPost() {
             if ('{{login_status}}' !== "None") {
                 var login_data = JSON.parse('{{login_status}}');
@@ -81,16 +82,34 @@
                 });
             }
         }
+        function checkSize(max_img_size) {
+            var input = document.getElementById("file");
+            // check for browser support (may need to be modified)
+            if(input.files && input.files.length == 1)
+            {           
+                if (input.files[0].size > max_img_size) 
+                {
+                    alert("The file must be less than " + (max_img_size/1024/1024) + "MB");
+                    return false;
+                }
+            }
+
+            return true;
+        }
     </script>
     <div style="display: flex; flex-wrap: wrap;">
-        <form id="myForm" style="margin-left: 1vw; width: 100%;">
+        <form id="myForm" method="POST" action="/api/add_blog_new" enctype="multipart/form-data" onsubmit="return checkSize(5000000)" style="margin-left: 1vw; width: 100%;" >
+            <input id="user" name="user" hidden>
+            <script>
+                document.getElementById("user").value = JSON.parse('{{login_status}}')["username"]
+            </script>
             <div class="input-field">
-                <textarea id="blog_title" class="materialize-textarea"></textarea>
+                <input id="blog_title" name="blog_title" type="text" required>
                 <label for="blog_title">Title</label>
             </div>
             <div class="row">
                 <div class="input-field col s6">
-                    <textarea id="blog_content" class="materialize-textarea"></textarea>
+                    <textarea id="blog_content" name="blog_content" class="materialize-textarea" required></textarea>
                     <label for="blog_content">Content</label>
                 </div>
                 <div id="markdownShow" class="col s6">
@@ -101,16 +120,17 @@
                 </div>
             </div>
             <div class="file-field input-field">
-                <div class="btn">
+                <div style="background: black; color: white;" class="btn">
                     <span>File</span>
-                    <input name="file" id="file" type="file" accept="image/*">
+                    <input name="file" id="file" type="file" accept="image/*" required>
                 </div>
                 <div class="file-path-wrapper">
                     <input class="file-path validate" type="text" placeholder="Upload Blog Image">
                 </div>
             </div>                    
             <div style="text-align: center;">
-                <a onclick="FinalPost()" class="waves-effect waves-light btn">Post Blog</a>
+                <!-- <a onclick="FinalPost()" class="waves-effect waves-light btn">Post Blog</a> -->
+                <button style="z-index: 1; background: black; color: white" class="waves-effect waves-light btn">Post Blog</button>
             </div>
             
         </form>
