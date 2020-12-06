@@ -12,7 +12,7 @@ import pyimgur
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+# APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 if "DYNO" not in os.environ:
     with open("apiTokens.txt") as apiToken:
@@ -20,14 +20,14 @@ if "DYNO" not in os.environ:
             IMGUR_ID=apiToken.readline().strip().strip("Imgur ID: "),
             MONGO_URI=apiToken.readline().strip().strip("MONGO_URI: "),
             SECRET_KEY=apiToken.readline().strip().strip("SECRET_KEY: "),
-            UPLOAD_FOLDER=os.path.join(APP_ROOT, "static", "tmp_blog_images")
+            UPLOAD_FOLDER=os.path.join("static", "tmp_blog_images")
         )
 else:
     app.config.update(
         IMGUR_ID=os.environ["IMGUR_ID"],
         MONGO_URI=os.environ["MONGO_URI"],
         SECRET_KEY=os.environ["SECRET_KEY"],
-        UPLOAD_FOLDER=os.path.join(APP_ROOT, "static", "tmp_blog_images")
+        UPLOAD_FOLDER=os.path.join("static", "tmp_blog_images")
     )
 app.config["ImgurObject"] = pyimgur.Imgur(app.config["IMGUR_ID"])
 mongo = PyMongo(app)
