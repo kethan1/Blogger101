@@ -17,7 +17,7 @@ app.url_map.strict_slashes = False
 if "DYNO" not in os.environ:
     with open("apiTokens.txt") as apiToken:
         app.config.update(
-            IMGUR_ID=apiToken.readline().strip().strip("Imgur ID: "),
+            IMGUR_ID=apiToken.readline().strip().strip("Imgur_ID: "),
             MONGO_URI=apiToken.readline().strip().strip("MONGO_URI: "),
             SECRET_KEY=apiToken.readline().strip().strip("SECRET_KEY: "),
             UPLOAD_FOLDER="./tmp"
