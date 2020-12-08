@@ -6,7 +6,7 @@ To Run:
 
 Prerequisites:
 
-Python 3.3 and newer
+Python 3.3 and newer \
 Pip
 
 Instructions:
