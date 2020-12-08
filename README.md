@@ -4,9 +4,14 @@ This is a simple blogging website like Medium.
 
 To Run:
 
-Download this repo and unzip the folder.
+Prerequisites:
 
-Then, `cd` into the repo folder, and run `pip install -r requirements.txt`. After that, create an apiTokens.txt file with the following format:
+Python 3.3 and newer
+Pip
+
+Instructions:
+
+Download this repo and unzip the folder. Then, `cd` into the folder, and run `pip install -r requirements.txt` to install the needed packages. After that, create an apiTokens.txt file with the following format:
 
 ```
 Imgur_ID: [Imgur ID API Key Here]
