@@ -9,7 +9,7 @@ Download this repo and unzip the folder.
 Then, `cd` into the repo folder, and run `pip install -r requirements.txt`. After that, create an apiTokens.txt file with the following format:
 
 ```
-Imgur ID: [Imgur ID API Key Here]
+Imgur_ID: [Imgur ID API Key Here]
 MONGO_URI: [MongoDB Atlas (free tier will do) URL. Create a project, and collection with blogs, comments, and users. Get the url for the collection and paste it here. ]
 SECRET_KEY: [A bunch of random letters used for encrypting the cookies. Something like "test123" will do for development, but make sure to use something longer and more complicated for production. ]
 ```
