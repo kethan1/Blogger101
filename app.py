@@ -12,8 +12,6 @@ import pyimgur
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
-# APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-
 if "DYNO" not in os.environ:
     with open("apiTokens.txt") as apiToken:
         app.config.update(
@@ -191,50 +189,46 @@ def api_blogs():
         to_return.append(blog_copy)
     return jsonify(to_return)
 
-@app.route("/api/add_image", methods=["POST"])
-def add_image():
-    print(request.files)
-    for file in request.files.getlist('file'):
-        file.save(os.path.join(app.config.get('UPLOAD_FOLDER'), secure_filename(file.filename)))
-        uploaded_image = app.config["ImgurObject"].upload_image("./static/images/blog_images/%s" % secure_filename(file.filename), title=file.filename)
-        print(uploaded_image.link)
-        mongo.db.blogs.update_one({"name": file.split(".")[0]+".html"}, {"$set": {"image": uploaded_image.link}})
-        return {"worked": True}
-    return {"worked": False}
 
-@app.route("/api/add_blog", methods=["POST"])
-def add_blog():
-    content = request.json.get("content")
-    username = request.json.get("user")
-    title = request.json.get("title")
-    name = ("_".join(title.split(" "))).lower()
-    doc = {
-        "title": title,
-        "user": username,
-        "name": name+".html",
-        "text": content,
-        "link": "/blog/%s" % name,
-        "date_released": datetime.datetime.today().strftime("%m/%d/%Y"),
-        "comments": [],
-        "image": ""
-    }
-    mongo.db.blogs.insert_one(doc)
-    return {"worked": True}
+# Old API
+# @app.route("/api/add_image", methods=["POST"])
+# def add_image():
+#     print(request.files)
+#     for file in request.files.getlist('file'):
+#         file.save(os.path.join(app.config.get('UPLOAD_FOLDER'), secure_filename(file.filename)))
+#         uploaded_image = app.config["ImgurObject"].upload_image("./static/images/blog_images/%s" % secure_filename(file.filename), title=file.filename)
+#         print(uploaded_image.link)
+#         mongo.db.blogs.update_one({"name": file.split(".")[0]+".html"}, {"$set": {"image": uploaded_image.link}})
+#         return {"worked": True}
+#     return {"worked": False}
+
+# @app.route("/api/add_blog", methods=["POST"])
+# def add_blog():
+#     content = request.json.get("content")
+#     username = request.json.get("user")
+#     title = request.json.get("title")
+#     name = ("_".join(title.split(" "))).lower()
+#     doc = {
+#         "title": title,
+#         "user": username,
+#         "name": name+".html",
+#         "text": content,
+#         "link": "/blog/%s" % name,
+#         "date_released": datetime.datetime.today().strftime("%m/%d/%Y"),
+#         "comments": [],
+#         "image": ""
+#     }
+#     mongo.db.blogs.insert_one(doc)
+#     return {"worked": True}
 
 @app.route("/api/add_blog_new", methods=["POST"])
-def add_blog_new():
-    print(request.form)
-    print(request.form["blog_title"])
-    print(request.form["blog_content"])
-    print(request.files)
-    print(request.files["file"].filename)    
+def add_blog_new():  
     content = request.form.get("blog_content")
     username = request.form.get("user")
     title = request.form.get("blog_title")
     name = ("_".join(title.split(" "))).lower()
     uploaded_file = request.files["file"]
     filename = secure_filename(name)+"."+((uploaded_file.filename).split(".")[1])
-    print(app.config['UPLOAD_FOLDER'], filename, os.path.join(app.config['UPLOAD_FOLDER'], filename))
     uploaded_file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
     to_upload_image = app.config["ImgurObject"].upload_image(os.path.join(app.config["UPLOAD_FOLDER"], filename))
     # to_upload_image = app.config["ImgurObject"].upload_image(uploaded_file.read())
