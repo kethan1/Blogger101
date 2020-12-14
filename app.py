@@ -228,6 +228,7 @@ def add_blog_new():
     title = request.form.get("blog_title")
     name = ("_".join(title.split(" "))).lower()
     uploaded_file = request.files["file"]
+    print(uploaded_file)
     filename = secure_filename(name)+"."+((uploaded_file.filename).split(".")[1])
     uploaded_file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
     to_upload_image = app.config["ImgurObject"].upload_image(os.path.join(app.config["UPLOAD_FOLDER"], filename))
