@@ -230,7 +230,7 @@ def add_blog_new():
     filename = secure_filename(name)+"."+((uploaded_file.filename).split(".")[1])
     path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
     print(filename, name, title, path)
-    uploaded_file.save(app.config["UPLOAD_FOLDER"], filename)
+    uploaded_file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
     os.listdir(app.config["UPLOAD_FOLDER"])
     to_upload_image = app.config["ImgurObject"].upload_image(os.path.join(app.config["UPLOAD_FOLDER"], filename))
     doc = {
