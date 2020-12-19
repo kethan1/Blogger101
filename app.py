@@ -224,19 +224,18 @@ def api_blogs():
 @app.route("/api/add_blog_new", methods=["POST"])
 def add_blog_new():  
     content = request.form.get("blog_content")
-    username = request.form.get("user")
     title = request.form.get("blog_title")
     name = ("_".join(title.split(" "))).lower()
     uploaded_file = request.files["file"]
-    print(uploaded_file)
     filename = secure_filename(name)+"."+((uploaded_file.filename).split(".")[1])
-    uploaded_file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+    path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+    print(filename, name, title, path)
+    uploaded_file.save(app.config["UPLOAD_FOLDER"], filename)
     os.listdir(app.config["UPLOAD_FOLDER"])
     to_upload_image = app.config["ImgurObject"].upload_image(os.path.join(app.config["UPLOAD_FOLDER"], filename))
-    # to_upload_image = app.config["ImgurObject"].upload_image(uploaded_file.read())
     doc = {
         "title": title,
-        "user": username,
+        "user": request.form.get("user"),
         "name": name+".html",
         "text": content,
         "link": "/blog/%s" % name,
