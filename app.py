@@ -18,15 +18,13 @@ if "DYNO" not in os.environ:
         app.config.update(
             IMGUR_ID=apiToken.readline().strip().strip("Imgur_ID: "),
             MONGO_URI=apiToken.readline().strip().strip("MONGO_URI: "),
-            SECRET_KEY=apiToken.readline().strip().strip("SECRET_KEY: "),
-            UPLOAD_FOLDER="./tmp"
+            SECRET_KEY=apiToken.readline().strip().strip("SECRET_KEY: ")
         )
 else:
     app.config.update(
         IMGUR_ID=os.environ["IMGUR_ID"],
         MONGO_URI=os.environ["MONGO_URI"],
-        SECRET_KEY=os.environ["SECRET_KEY"],
-        UPLOAD_FOLDER="./tmp"
+        SECRET_KEY=os.environ["SECRET_KEY"]
     )
 app.config["ImgurObject"] = pyimgur.Imgur(app.config["IMGUR_ID"])
 mongo = PyMongo(app)
@@ -214,8 +212,10 @@ def check_user():
     email = (request.json["email"]).lower()
     password = request.json["password"]
 
-    if mongo.db.users.find_one({"email": email, "password": password}) is not None:
-        return {"found": True, "wrong": None}
+    user_found = mongo.db.users.find_one({"email": email, "password": password}) 
+
+    if user_found is not None:
+        return {"found": True, "wrong": None, "user_found": user_found["username"]}
     else:
         if mongo.db.users.find_one({"email": email}):
             return {"found": False, "wrong": "password"}
