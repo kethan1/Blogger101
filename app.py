@@ -190,7 +190,7 @@ def api_blogs():
 
 @app.route("/api/add_blog_new", methods=["POST"])
 def add_blog_new():
-    print(request.json)
+    print(request.form)
     print(request.files)
     title = request.form.get("blog_title")
     name = ("_".join(title.split(" "))).lower()
