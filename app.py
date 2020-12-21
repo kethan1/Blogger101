@@ -187,7 +187,7 @@ def logout():
 @app.route("/api/blogs")
 def api_blogs():
     to_return = []
-    for blog in sorted(list(mongo.db.blogs.find({})), key=lambda date: datetime.datetime.strptime(date["date_released"], "%m/%d/20%y")):
+    for blog in reversed(sorted(list(mongo.db.blogs.find({})), key=lambda date: datetime.datetime.strptime(date["date_released"]+date["time_released"], "%m/%d/20%y%H:%M:%S:%f"))):
         blog["_id"] = str(blog["_id"])
         blog["link"] = "https://blogger-101.herokuapp.com/" + blog["link"]
         to_return.append(blog)
@@ -310,7 +310,7 @@ def page_not_found(e):
 
 
 def list_blogs():
-    return sorted(list(mongo.db.blogs.find({})), key=lambda date: datetime.datetime.strptime(date["date_released"], "%m/%d/20%y"))
+    return reversed(sorted(list(mongo.db.blogs.find({})), key=lambda date: datetime.datetime.strptime(date["date_released"]+date["time_released"], "%m/%d/20%y%H:%M:%S:%f")))
 
 
 app.add_template_global(datetime.date, name="date")
