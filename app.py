@@ -46,7 +46,7 @@ def blogs():
         if logged_in != {}:
             return render_template("blogs.html", login_status=dict(session["logged_in"]))
         else:
-            return render_template("blogs.html")
+            return render_template("blogs.html", login_status=None)
     except:
         return render_template("blogs.html", login_status=None)
 
@@ -76,9 +76,9 @@ def return_blog(page):
             if logged_in != {}:
                 return render_template("blog_template.html", results=results, login_status=dict(session["logged_in"]))
             else:
-                return render_template("blog_template.html", results=results, login_status="None")
+                return render_template("blog_template.html", results=results, login_status=None)
         except:
-            return render_template("blog_template.html", results=results, login_status="None")
+            return render_template("blog_template.html", results=results, login_status=None)
 
 
 @app.route("/user/<user>/")
@@ -87,7 +87,14 @@ def return_use(user):
     if results is None:
         abort(404)
     else:
-        return render_template(f"user_template.html", login_status=results)
+        try:
+            logged_in = session["logged_in"]
+            if logged_in != {}:
+                return render_template(f"user_template.html", results_from_user=results, login_status=dict(session["logged_in"]))
+            else:
+                return render_template(f"user_template.html", results_from_user=results)
+        except:
+            return render_template(f"user_template.html", results_from_user=results)
 
 @app.route("/sign_up", methods=["GET", "POST"])
 def sign_up():
@@ -181,28 +188,24 @@ def logout():
 def api_blogs():
     to_return = []
     for blog in sorted(list(mongo.db.blogs.find({})), key=lambda date: datetime.datetime.strptime(date["date_released"], "%m/%d/20%y")):
-        blog_copy = blog.copy()
-        del blog_copy["_id"]        
-        blog_copy["image"] = blog_copy["image"]
-        blog_copy["link"] = "https://blogger-101.herokuapp.com/" + blog_copy["link"]
-        to_return.append(blog_copy)
+        blog["_id"] = str(blog["_id"])
+        blog["link"] = "https://blogger-101.herokuapp.com/" + blog["link"]
+        to_return.append(blog)
     return jsonify(to_return)
 
 @app.route("/api/add_blog_new", methods=["POST"])
 def add_blog_new():
-    print(request.form)
-    print(request.files)
     title = request.form.get("blog_title")
     name = ("_".join(title.split(" "))).lower()
-    data = base64.b64encode(request.files['file'].read())
-    to_upload_image = app.config["ImgurObject"]._send_request('https://api.imgur.com/3/image', method='POST', params={'image': data})
+    to_upload_image = app.config["ImgurObject"]._send_request('https://api.imgur.com/3/image', method='POST', params={'image': base64.b64encode(request.files['file'].read())})
     doc = {
         "title": title,
         "user": request.form.get("user"),
         "name": name+".html",
         "text": request.form.get("blog_content"),
         "link": "/blog/%s" % name,
-        "date_released": datetime.datetime.today().strftime("%m/%d/%Y"),
+        "date_released": datetime.datetime.utcnow().strftime("%m/%d/%Y"),
+        "time_released": datetime.datetime.today().strftime("%H:%M:%S:%f"),
         "comments": [],
         "image": to_upload_image["link"]
     }

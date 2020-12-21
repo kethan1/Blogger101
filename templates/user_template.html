@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}User {{ login_status["username"] }}{% endblock %}
+{% block title %}User {{ results_from_user["username"] }}{% endblock %}
 {% block head %}
     {{ super() }}
 {% endblock %}
 
 {% block content %}
     <div style="text-align: center;" class="container">
-        <p>Name: {{ login_status["first_name"] }} {{ login_status["last_name"] }}</p>
-        <p>Display Name (Username): {{ login_status["username"] }}</p>
+        <p>Name: {{ results_from_user["first_name"] }} {{ results_from_user["last_name"] }}</p>
+        <p>Display Name (Username): {{ results_from_user["username"] }}</p>
     </div>
 {% endblock %}
