@@ -49,10 +49,22 @@
     {% block navbar %}
         <div class="row">
             <div class="l12 show-on-large hide-on-med-and-down">
-                <nav style="background-color: #222222" class="">
+                <nav style="background-color: #222222">
                     <div class="nav-wrapper">
                         
                         <ul class="right hide-on-med-and-down">
+                            <li>
+                                <i class="material-icons prefix unselectable">account_circle</i>
+                            </li>
+                            <li style="color: white;">
+                                &nbsp;Logged In:
+                                {% if login_status == None %}
+                                    User Not Logged In&nbsp;&nbsp;&nbsp;
+                                {% else %}
+                                    <a style="display: inline; color: #2188DB;" href="/user/{{ login_status.username }}">{{ login_status.username }}</a>&nbsp;&nbsp;&nbsp;
+                                {% endif %}
+
+                            </li>
                             {% block blogs_link_nav %}
                                 <li><a style="color: white;" href="/">Blogs</a></li>
                             {% endblock %}
