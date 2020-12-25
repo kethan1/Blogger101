@@ -292,14 +292,13 @@ def get_comments():
             toAppend.append(returned["user"])
             toAppend.append(str(returned["_id"]))
             toAppend2 = []
-            if comment[1] != "None":
-                for subComment in comment[1]:
-                    returned2 = mongo.db.comments.find_one({"_id": ObjectId(str(subComment))})
-                    toAppend2.append([returned2["comment"], returned2["user"]])
+            for subComment in comment[1]:
+                returned2 = mongo.db.comments.find_one({"_id": ObjectId(str(subComment))})
+                toAppend2.append([returned2["comment"], returned2["user"]])
             toAppend.append(toAppend2)
             toAppend2 = []
             commentsToShow.append(toAppend)
-        return {"found": commentsToShow}
+        return {"found": commentsToShow, "number_of_comments": len(commentsToShow)}
     else:
         return {"found": False}
 
