@@ -34,7 +34,6 @@
         <div id="comments"></div>
         <div id="containsMainInput" class="input-field">
             <i class="material-icons prefix unselectable">comment</i>
-            <input name="blog_name" type="hidden" value='{{ results["title"] }}'>
             <input onKeyDown="if(event.keyCode==13) PostCommentandSwitch();" id="comment_input" name="comment" type="text">
             <label for="comment_input">Comment</label>
         </div>
