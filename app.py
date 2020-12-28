@@ -256,8 +256,8 @@ def add_user():
 def add_comment():
     blog = request.json["blog_title"]
     comment_type = request.json["type"]
-    blog_found = mongo.db.blogs.find_one({"title": blog})
     comment_content = request.json["comment_content"]
+    blog_found = mongo.db.blogs.find_one({"title": blog})
     if blog_found != None:
         if comment_type == "main":
             _id = mongo.db.comments.insert_one({"comment": comment_content, "user" : request.json["user"]})
@@ -282,8 +282,8 @@ def add_comment():
 
 @app.route("/api/get_blog_comments", methods=["POST"])
 def get_comments():
-    if mongo.db.blogs.find_one({"title": request.json.get("blog_name")}) is not None:
-        comments = mongo.db.blogs.find_one({"title": request.json.get("blog_name")})["comments"]
+    if mongo.db.blogs.find_one({"title": request.json.get("blog_title")}) is not None:
+        comments = mongo.db.blogs.find_one({"title": request.json.get("blog_title")})["comments"]
         commentsToShow = []
         for comment in comments:
             toAppend = []
@@ -296,7 +296,6 @@ def get_comments():
                 returned2 = mongo.db.comments.find_one({"_id": ObjectId(str(subComment))})
                 toAppend2.append([returned2["comment"], returned2["user"]])
             toAppend.append(toAppend2)
-            toAppend2 = []
             commentsToShow.append(toAppend)
         return {"found": commentsToShow, "number_of_comments": len(commentsToShow)}
     else:

@@ -108,7 +108,7 @@
             const commentsElement = document.getElementById('comments');
             fetch("/api/get_blog_comments", {
                 headers : {"content-type" : "application/json; charset=UTF-8"},
-                body : JSON.stringify({"blog_name": "{{ results['title'] }}"}),
+                body : JSON.stringify({"blog_title": "{{ results['title'] }}"}),
                 method : "POST"
             })
             .then(async (response) => {
