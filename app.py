@@ -317,4 +317,4 @@ app.add_template_global(list_blogs, name="find_blogs")
 
 
 if __name__ == "__main__":
-    app.run(debug=True, threaded=True)
+    app.run(debug=("DYNO" not in os.environ), threaded=True)
