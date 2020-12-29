@@ -220,14 +220,9 @@ def check_user():
     user_found = mongo.db.users.find_one({"email": email, "password": password}) 
 
     if user_found is not None:
-        return {"found": True, "wrong": None, "user_found": user_found["username"]}
+        return {"found": True, "user_found": user_found["username"]}
     else:
-        if mongo.db.users.find_one({"email": email}):
-            return {"found": False, "wrong": "password"}
-        elif mongo.db.users.find_one({"password": password}):
-            return {"found": False, "wrong": "email"}
-        else:
-            return {"found": False, "wrong": "both"}
+        return {"found": False}
 
 
 @app.route("/api/add_user", methods=["POST"])
