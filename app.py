@@ -56,7 +56,7 @@ def post_blog():
     try:
         logged_in = session["logged_in"]
         if logged_in != {}:
-            return render_template("post_blog.html", login_status=Markup(json.dumps(dict(logged_in))))
+            return render_template("post_blog.html", login_status=dict(session["logged_in"]))
         else:
             flash(Markup("""Please <a style="text-decoration: underline;" href="/login">Login</a> or <a style="text-decoration: underline;" href="/sign_up">Sign Up</a> to Post a Blog"""))
             return redirect("/")
