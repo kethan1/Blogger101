@@ -19,13 +19,13 @@
 {% endblock %}
 
 {% block content %}
-    <span style="text-align: right;">Posted On: {{ results["date_released"] }}</span>
-    <span style="text-align: right;">Posted By: <a style="text-decoration: underline;" href='/user/{{ results["user"] }}'>{{ results["user"] }}</a></span>
+    <div style="display: flex; justify-content: space-between;">
+        <span style="margin-left: 1%">Posted On: {{ results["date_released"] }}</span>
+        <span style="margin-right: 1%">Posted By: <a style="text-decoration: underline;" href='/user/{{ results["user"] }}'>{{ results["user"] }}</a></span>
+    </div>
     <br>
     <div class="container">
-        
-        <zero-md>
-            
+        <zero-md> 
             <script type="text/markdown" data-dedent>
                 {{ results["text"] }}
             </script>
