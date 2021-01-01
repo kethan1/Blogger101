@@ -251,7 +251,7 @@ def add_user():
 def add_comment():
     blog = request.json["blog_title"]
     comment_type = request.json["type"]
-    comment_content = request.json["comment_content"]
+    comment_content = "&zwnj;"+request.json["comment_content"]
     blog_found = mongo.db.blogs.find_one({"title": blog})
     if blog_found != None:
         if comment_type == "main":
