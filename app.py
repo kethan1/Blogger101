@@ -74,6 +74,7 @@ def return_blog(page):
         try:
             logged_in = session["logged_in"]
             if logged_in != {}:
+                results["text"] = Markup(results["text"])
                 return render_template("blog_template.html", results=results, login_status=dict(session["logged_in"]))
             else:
                 return render_template("blog_template.html", results=results, login_status=None)
