@@ -20,68 +20,6 @@
 {% block content %}
     <script>
         console.log(JSON.parse('{{login_status}}')["username"]);
-        function FinalPost() {
-            if ('{{login_status}}' !== "None") {
-                var login_data = JSON.parse('{{login_status}}');
-                var to_send = {
-                    "user": login_data["username"],
-                    "title": document.getElementById("blog_title").value,
-                    "content": document.getElementById("blog_content").value,
-                }
-                var filesInput = document.getElementById("file");
-                const data = new FormData();
-                if(filesInput.files[0].size > 7000000){
-                    M.toast({
-                        html: 'Uploaded Image is Too Big, Limit: 5 MB',
-                        classes: 'rounded'
-                    });
-                } else {
-                    var file = filesInput.files[0];
-                    var newFile = new File(file, ((document.getElementById("blog_title").value).replaceAll(" ", "_")).toLowerCase(), {
-                        type: file.type,
-                        lastModified: file.lastModified,
-                    });
-                    /* var blob = file.slice(0, file.size, file.type); 
-                    var fileType = (file.type).replace('image/', '');
-                    var fileName = ((document.getElementById("blog_title").value).replaceAll(" ", "_")).toLowerCase()+"."+fileType;
-                    var newFile = new File([blob], fileName, {type: file.type}); */
-                    data.append(fileName, newFile);
-                    fetch("/api/add_blog", {
-                        headers : {"content-type" : "application/json; charset=UTF-8"},
-                        body : JSON.stringify(
-                            {
-                                "user": login_data["username"],
-                                "title": document.getElementById("blog_title").value,
-                                "content": document.getElementById("blog_content").value
-                            }
-                        ),
-                        method : "POST"
-                    })
-                    .then(async (response) => {
-                        var responseInJson = await response.json();
-                        if (responseInJson["worked"] == false) {
-                            M.toast({
-                                html: 'Error In Posting Blog',
-                                classes: 'rounded'
-                            });
-                        }
-                    });
-                    fetch("/api/add_image", {
-                        body : data,
-                        method : "POST"
-                    })
-                    .then(async (response) => {
-                        var responseInJson = await response.json();
-                    });
-                    window.location.href = "/";
-                }
-            } else {
-                M.toast({
-                    html: '<span>Please <a style="text-decoration: underline;" href="/login">Login</a> or <a style="text-decoration: underline;" href="/sign_up">Sign Up</a> to Post a Blog</span><button class="btn-flat toast-action" style="color: white;" onclick="M.Toast.dismissAll();">X</button>',
-                    classes: 'rounded'
-                });
-            }
-        }
         function checkSize(max_img_size) {
             var input = document.getElementById("file");
             // check for browser support (may need to be modified)
@@ -99,10 +37,7 @@
     </script>
     <div style="display: flex; flex-wrap: wrap;">
         <form id="myForm" method="POST" action="/api/add_blog_new" enctype="multipart/form-data" onsubmit="return checkSize(5000000)" style="margin-left: 1vw; width: 100%;" >
-            <input id="user" name="user" hidden>
-            <script>
-                document.getElementById("user").value = JSON.parse('{{login_status}}')["username"]
-            </script>
+            <input id="user" name="user" value="{{ login_status['username'] }}" hidden>
             <div class="input-field">
                 <input id="blog_title" name="blog_title" type="text" required>
                 <label for="blog_title">Title</label>
@@ -129,7 +64,6 @@
                 </div>
             </div>                    
             <div style="text-align: center;">
-                <!-- <a onclick="FinalPost()" class="waves-effect waves-light btn">Post Blog</a> -->
                 <button style="z-index: 1; background: black; color: white" class="waves-effect waves-light btn">Post Blog</button>
             </div>
             

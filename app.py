@@ -206,7 +206,7 @@ def add_blog_new():
         "text": request.form.get("blog_content"),
         "link": "/blog/%s" % name,
         "date_released": datetime.datetime.utcnow().strftime("%m/%d/%Y"),
-        "time_released": datetime.datetime.today().strftime("%H:%M:%S:%f"),
+        "time_released": datetime.datetime.utcnow().strftime("%H:%M:%S:%f"),
         "comments": [],
         "image": to_upload_image["link"]
     }
